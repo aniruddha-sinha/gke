@@ -11,14 +11,14 @@ data "google_compute_network" "gke_network" {
 data "google_compute_subnetwork" "gke_subnetwork" {
   name    = "subnet-us-0"
   project = var.project_id
-  region  = var.location
+  region  = var.region_preference
 }
 
 resource "google_container_cluster" "gke_cluster" {
   provider                 = google-beta
   name                     = var.autopilot_enabled ? "gke-autopilot-${var.project_id}" : "gke-standard-${var.project_id}"
   project                  = var.project_id
-  location                 = var.location
+  location                 = (var.cluster_type == "region" || var.autopilot_enabled) ? var.region_preference : var.zone_preference
   initial_node_count       = var.autopilot_enabled ? null : 1
   remove_default_node_pool = var.autopilot_enabled ? null : true #if autopilot enabled this parameter must not exist thereby nullifying
   network                  = data.google_compute_network.gke_network.name
@@ -80,7 +80,7 @@ resource "google_container_node_pool" "node_pool" {
   count      = var.autopilot_enabled ? 0 : 1
   name       = "gke-node-pool-${var.project_id}"
   project    = var.project_id
-  location   = var.location
+  location   = (var.cluster_type == "region" || var.autopilot_enabled) ? var.region_preference : var.zone_preference
   cluster    = google_container_cluster.gke_cluster.name
   node_count = 3
 

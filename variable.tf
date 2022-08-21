@@ -2,19 +2,27 @@ variable "project_id" {
   type        = string
   description = "The project ID where the GKE cluster will be created"
 }
-
 variable "autopilot_enabled" {
   type        = bool
   description = "Defaults to false : create standard Cluster else create autopilot GKE cluster"
   default     = false
 }
 
-variable "location" {
+variable "cluster_type" {
   type        = string
-  description = "defaults to us-central1-a which is a zonal cluster; this location does accept region thereby making it a regional cluster"
-  default     = "us-central1"
+  default     = "regional"
+  description = "type of cluster : zonal/regional"
 }
 
+variable "region_preference" {
+  type        = string
+  description = "GCP Region of Preference"
+}
+
+variable "zone_preference" {
+  type        = string
+  description = "GCP zone of preference"
+}
 variable "service_account_id" {
   type        = string
   description = "service account id"

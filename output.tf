@@ -11,7 +11,11 @@ output "cluster_name" {
 }
 
 output "region" {
-  value = var.location
+  value = var.region_preference
+}
+
+output "zone" {
+  value = var.zone_preference
 }
 
 output "project_id" {
