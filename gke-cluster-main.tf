@@ -92,11 +92,12 @@ resource "google_container_node_pool" "node_pool" {
   cluster    = google_container_cluster.gke_cluster.name
   node_count = 3
   version    = data.google_container_engine_versions.k8s_versions.release_channel_default_version["RAPID"] 
+  location_policy = "BALANCED"
   node_config {
     preemptible  = var.preemptible
     machine_type = var.node_machine_type
     disk_size_gb = var.node_disk_size_in_gb
-    image_type   = "COS"
+    # image_type   = "COS"
 
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
     service_account = data.google_service_account.custom_service_account.email
