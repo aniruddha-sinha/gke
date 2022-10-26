@@ -4,6 +4,7 @@ data "google_service_account" "custom_service_account" {
 }
 
 data "google_container_engine_versions" "k8s_versions" {
+  project        = var.project_id
   provider       = google-beta
   location       = (var.cluster_type == "region" || var.autopilot_enabled) ? var.region_preference : var.zone_preference
   version_prefix = "1.23."
