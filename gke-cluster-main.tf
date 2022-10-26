@@ -91,7 +91,7 @@ resource "google_container_node_pool" "node_pool" {
   location   = (var.cluster_type == "region" || var.autopilot_enabled) ? var.region_preference : var.zone_preference
   cluster    = google_container_cluster.gke_cluster.name
   node_count = 3
-
+  version    = data.google_container_engine_versions.k8s_versions.release_channel_default_version["RAPID"] 
   node_config {
     preemptible  = var.preemptible
     machine_type = var.node_machine_type
