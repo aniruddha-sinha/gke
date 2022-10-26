@@ -3,6 +3,12 @@ data "google_service_account" "custom_service_account" {
   project    = var.project_id
 }
 
+data "google_container_engine_versions" "k8s_versions" {
+  provider       = google-beta
+  location       = (var.cluster_type == "region" || var.autopilot_enabled) ? var.region_preference : var.zone_preference
+  version_prefix = "1.23."
+}
+
 data "google_compute_network" "gke_network" {
   name    = "vpc-${var.project_id}"
   project = var.project_id
@@ -25,6 +31,7 @@ resource "google_container_cluster" "gke_cluster" {
   subnetwork               = data.google_compute_subnetwork.gke_subnetwork.name
   logging_service          = "logging.googleapis.com/kubernetes"
   monitoring_service       = "monitoring.googleapis.com/kubernetes"
+  node_version             = data.google_container_engine_versions.k8s_versions.release_channel_default_version["RAPID"] 
   /*
     Enable autopilot conflicts with remove default node pool
     therefore nullifying the boolean variable if the autopilot mode is turned off
