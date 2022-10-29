@@ -78,7 +78,7 @@ resource "google_container_cluster" "gke_cluster" {
   master_authorized_networks_config {
     cidr_blocks {
       display_name = var.master_auth_ip_whitelisting_name
-      cidr_block   = format("%s/32", var.public_ip_address_of_the_system)
+      cidr_block   = var.public_ip_address_of_the_system
     }
   }
 }
